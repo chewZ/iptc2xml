@@ -181,8 +181,53 @@ stringDATE=${stringALL:$DATE_START_POS:$DATE_LENGTH}
 #TITLE_END_POS=`expr index "$stringTEXT" =`
 #stringTITLE=${stringTITLE:$TITLE_START_POS:$TITLE_END_POS}
 
-stringTITLE=$(echo "$stringTEXT" |awk '/^.+=/')
+# Divido in paragrafi (2 newline)OIFS=$IFS
+: '
+#OLD_IFS=$IFS
+#IFS=$'\n\n'o
+COUNT=0
+#for PAR in echo "$stringTEXT" 
+#for PAR in $("${(@s:\n\n:)$(echo "$stringTEXT")}")
+#
+#do
+#				COUNT=$(($COUNT+1))
+#				echo $COUNT " " $PAR
+#done
+#IFS=$OLD_IFS
+OLD_IFS=$IFS
+IFS=$'\n'
+while read line
+do
+				COUNT=$(($COUNT + 1))
+				echo $COUNT: "<p>" $line "</p>"
+done< <(echo "$stringTEXT")
+IFS=$OLD_IFS
+#c=1;while IFS= read;do printf "Line $((c++)) is: %s\n" "$REPLY";done< <(echo "$A")
+stringPAR=$(echo "$stringTEXT" | sed -e "s/\r\n\n/<line>/")
+echo "REGEX" `expr match : "$stringTEXT" '^\(.\+*\)'`
+'
+stringTITLE=`echo "$stringTEXT" |awk '/^.+=/'`
 
+line_count=0
+line_prev=""
+while read line
+do
+				$line_count=$(($line_count + 1))
+				echo $line_count: "<p>" $line "</p>"
+				if [ $line =~ regexp ]
+				then
+					<lista-di-comandi>
+				[elif <lista-condizione>
+				then
+					<lista-di-comandi>]
+					...
+				[else
+					<lista-di-comandi>]
+				fi
+
+				
+done< <(echo "$stringTEXT")
+I
 echo 
 echo ""
 echo "++++++++++++++++++++++++"
